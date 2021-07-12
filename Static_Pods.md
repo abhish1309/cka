@@ -1,5 +1,8 @@
 # *Static Pods* :-
 
+### default static pods are in kube-system namespace
+kubectl get pods -n kube-system
+
 ### to check static pods creation. because its indipendent from cluster.
 ```
 docker ps		
