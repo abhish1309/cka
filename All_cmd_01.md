@@ -24,7 +24,9 @@ kubectl rollout undo deployment/myapp-deployment
 ### check command option.
 ```
 kubectl describe pod ubuntu-sleeper		
-```# *Cluster Maintenance* :-
+```
+
+# *Cluster Maintenance* :-
 
 
 ## *Join Node*
@@ -255,14 +257,17 @@ kubectl edit configmap CONFIGMAP_NAME
 ### to get the format to update yaml file.
 ```
 kubectl explain pods --recursive | grep envFrom -A3		
-```# *Cron Jobs* :-
+```
+# *Cron Jobs* :-
 
 ### create cron jobs
 ```
 kubectl create cronjob busybox --image=busybox \
 --schedule="*/1 * * * *" \
 -- bin/sh -c 'date; echo Hello from the kubernetes cluster'
-```# *DaemonSet* :-
+```
+
+# *DaemonSet* :-
 
 ### file same as replicaset only difference is kind, kind: DaemonSets
 ```
@@ -422,7 +427,8 @@ kubectl get hpa mynginx
 ### delete autoscalling deployments
 ```
 kubectl delete hpa mynginx
-```## *Docker engine/Docker Service*
+```
+## *Docker engine/Docker Service*
 
 ### to check to status of docker engine/docker daemon
 ```
@@ -879,7 +885,8 @@ kubectl apply -f /path/to/config-files
 ### update Objects
 ```
 kubectl apply -f nginx.yaml		
-```## *Jobs* :-
+```
+## *Jobs* :-
 
 ### create job
 ```
@@ -899,7 +906,8 @@ kubectl logs job math-add-job-*
 ### delete the job
 ```
 kubectl delete job match-add-job-*
-```# *Labels & Selectors* :-
+```
+# *Labels & Selectors* :-
 
 ### show all labels of node node01
 ```
@@ -926,7 +934,8 @@ kubectl get pods -l env=dev --no-headers | wc -l
 ### to get the pods with the help of selector
 ```
 kubectl get pods --selector app=App1			
-```# *Logging and Monitoring* :-
+```
+# *Logging and Monitoring* :-
 
 # Monitoring:-
 
@@ -984,7 +993,8 @@ kubectl logs webapp-2 -c
 ### check logs for container "simple-webapp" of pod "webapp-2" 
 ```
 kubectl logs webapp-2 -c simple-webapp			
-```# *Multi-Scheduler* :- 
+```
+# *Multi-Scheduler* :- 
 
 ### to check the manifest files; kube-scheduler.yaml
 ```
@@ -1047,7 +1057,8 @@ kubectl get pods --all-namespaces
 ### permenently switch to other namepace "dev". if we use get cmd for pods,deployment it will show details present in "dev" namespace only.
 ```
 kubectl config set-context $(kubectl config current-context) --namespace=dev		
-```# *Networking* :-
+```
+# *Networking* :-
 
 Note:- some commands are valid till system restart. for perme
 
@@ -1173,7 +1184,8 @@ cat /etc/coredns/Corefile
 ### label the node first, and inject(add) the nodeaffinity in the pod spec of pod-definition.yaml file
 ```
 kubectl label nodes node-1 color=blue		
-```# *Node Selector* :-
+```
+# *Node Selector* :-
 
 ### syntax to label a node
 ```
@@ -1496,7 +1508,8 @@ kubectl port-forward pod mypod	8888:5000
 ### kubetl set image POD/POD_NAME container_name=image:tag ( change the image on the fly.)
 ```
 kubectl set image pod mypod nginxcontainer=nginx:1.7.1		
-```# cka
+```
+# cka
 ## *Replica Set* :-
 
 ### create replication set
@@ -1532,7 +1545,8 @@ kubectl scale replicaset new-replica-set --replicas=2
 ### scale replicas by updating file & may need to apply to update
 ```
 kubectl scale --replicas=6 -f replicaset-definintion.yml		
-```## *Replication Controller* :-
+```
+## *Replication Controller* :-
 
 ### create replication controller
 ```
@@ -1545,7 +1559,8 @@ kubectl get replicationcontroller
 ```
 ```
 kubectl get rc
-```# *ResourceQuota* :-
+```
+# *ResourceQuota* :-
 
 ### to create quota
 ```
@@ -1638,7 +1653,8 @@ kubectl create secret docker-registry regcred \
 --docker-username=<your-name> \
 --docker-password=<your-pword> \
 --docker-email=<your-email>
-```# *Services* :-
+```
+# *Services* :-
 
 ### need to change the selector of service which matches deployment or pods/labels. to map service to deployment or pods.
 ```
@@ -1709,7 +1725,8 @@ kubectl get ep
 ### to test the connection of service within pods. Can use ip address as well
 ```
 kubectl run mybusybox01 --image=busybox -it --restart=Never --rm -- wget -O- http://<service-name>		
-```# *Static Pods* :-
+```
+# *Static Pods* :-
 
 ### default static pods are in kube-system namespace
 kubectl get pods -n kube-system
@@ -1748,7 +1765,8 @@ cat /var/lib/kubelet/config.yaml | grep -i staticpod
 ### to list the files of default static pod definitions present in manifest folder.
 ```
 ls /etc/kubernetes/manifests		
-```# *Taints and Tolerations* :-
+```
+# *Taints and Tolerations* :-
 
 ### syntax; effect:-(NoSchedule | PreferNoSchedule | NoExecute)
 ```
@@ -1859,90 +1877,6 @@ kubectl get persistentvolumeclaim
 ```
 kubectl get sc		
 ```
-<!-- Headings -->
-# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4 
-
----
-<!-- Italics -->
-*this text* is italic
-
-_this text_ is also italic 
-
----
-<!-- Bold -->
-**this text** is bold
-
-__this text__ is bold
-
----
-<!-- strike throuhg -->
-~~This text~~ is strikethrough.
-
----
-<!-- Horizontal Rule -->
----
-***
-___
-
-<!-- Blockquote -->
-> this is a quote
-
-<!-- links -->
-[link name](url "title")
-
-[Traversy madia](http://www.traversymedia.com)
-
-[Traver](http://www.googl.com "google")
-
-
-<!-- Unordered List-->
-* Item 1
-* Item 2
-* Item 3
-  * Item 3.1
-  * Item 3.2
-  * Item 3.3
-    * Item 3.3.1
-    * Item 3.3.2
-      * Item 3.3.2.1
-
-
-<!-- Github Markdown -->
-
-<!-- Code Blocks -->
-```bash
-
-npm install
-npm start
-```
-
-```javascript
-  function add(num1, num2) {
-      return num1 + num2;
-  }
-  ```
-
-  <!-- tabels -->
-  | Name    | Email         |
-  | ------- | --------------|
-  | John    | john@gmail.com|
-  | dep     | dep@gmail.com |
-  | Mary    | mary@gmail.com|
-  
-
-  <!-- task list -->
-  *[x] task 1
-
-  *[x] task 2
-
-  *[] task 3
-  
-
-  |
-
 
 # *API Groups* :-
 
