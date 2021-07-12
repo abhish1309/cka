@@ -156,11 +156,14 @@ docker run --name mytomcat1 -dp 8081:8080 tomcat:8.5.37-jre8
 docker run --name mynginx1 -dp 8081:80 nginx			
 ```
 
-## **Docker mode**
->Attach mode		(without -d):- creates container with attached terminal. If terminal closed container will be stoped.
->Detach mode		(with -d):- creates container with detached terminal
->Interaction mode	(with -it):- enter into container to execute commads.
->Detach + interaction	(with -dit):- runs in background
+### **Docker mode**
+>* Attach mode		(without -d):- creates container with attached terminal. If terminal closed container will be stoped.
+
+>* Detach mode		(with -d):- creates container with detached terminal
+
+>* Interaction mode	(with -it):- enter into container to execute commads.
+
+>* Detach + interaction	(with -dit):- runs in background
 
 ### to enter in container to execute required task
 ```
