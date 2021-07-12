@@ -91,3 +91,30 @@ docker rmi $(docker images -q)
 ```
 docker rmi `docker images -q`
 ```
+
+## *Build images*
+
+### to create new image from current running docker
+```
+docker commit <running dockercontainerID name> < new image name>			
+```
+
+### to save the containers changes for future use.
+```
+docker commit 4aab3ce3cb76 jamtur01/apache2:webserver			
+```
+
+### to build from current location "Dockerfile" and tag the image
+```
+docker build . -t myuser/image2			
+```
+
+### to build from "Dockerfile2" (is the name of Dockerfile),tag to upload to Docker hub
+```
+docker build . -f Dockerfile2 -t myuser/image2	
+```
+
+### to push to image to local repo/ required repo
+```
+docker push x/y:z
+```
