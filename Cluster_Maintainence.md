@@ -7,7 +7,8 @@
 ```
 kubeadm token create --print-join-command		
 ```
-
+---
+---
 ## *Os Upgrades*
 
 ### it simply marks the node as "unschedulable" and do not terminates the existing pods; it makes sure the new pods are not created on it.
@@ -31,13 +32,16 @@ kubectl drain node01 --ignore-daemonsets
 ```
 
 
-
+---
+---
 ## *Kubernetes Software Versions* :-
 ### to check the version
 ```
 kubeadm version
 ```
 
+---
+---
 
 ## *Cluster upgrade* :-
 ### to check the cluster info
@@ -60,6 +64,8 @@ kubectl version --short
 kubeadm upgrade plan		
 ```
 
+---
+---
 
 ## *Upgrade master node* :-
 ### to upgrade kubeadm & kublete to perticular versions 
@@ -80,7 +86,8 @@ apt install kubelet=1.18.0-00
 kubectl uncordon controlplane
 ```
 
-
+---
+---
 
 ## *Upgrade worker node* :-
 
@@ -108,6 +115,8 @@ exit
 kubectl uncordon node01		
 ```
 
+---
+---
 
 ## *Backup and restore* :-
 ### to backup manually to the files.
