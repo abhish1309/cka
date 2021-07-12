@@ -36,6 +36,10 @@ kubectl create -f nginx-deployment.yml
 kubectl create -f mydeploy06.yaml --record		
 ```
 
+***
+***
+
+
 ### to check deployments
 ```
 kubectl get deployments		
@@ -55,6 +59,9 @@ kubectl get pods
 ```
 kubectl get all		
 ```
+
+***
+***
 
 ###  to describe the deployment
 ```
@@ -80,6 +87,9 @@ kubectl expose deployment mydeploy01 --port 80
 ```
 kubectl set image deployment mydeploy02 nginxcontainer=nginx:1.17 --record		
 ```
+
+***
+***
 
 ### to check rollout status
 ```
@@ -115,6 +125,9 @@ kubectl rollout pause deploy mydeploy02
 ```
 kubectl rollout resume deploy mydeploy02		
 ```
+
+***
+***
 
 ### autoscalling application /deployments
 ```
