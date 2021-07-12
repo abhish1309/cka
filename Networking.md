@@ -70,12 +70,11 @@ cat /etc/resolve.conf
 
 ---
 record types.
+|-------|-------   |
 | A     | for ipv4 |
-|-------|-------   |
 | AAAA  | for ipv6 |
-|-------|-------   |
 | CNAME | for name change records.|
-|-------|-------   |
+
 
 ---
 
