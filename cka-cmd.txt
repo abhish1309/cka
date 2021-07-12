@@ -10,11 +10,11 @@
 ~~~~~~~~~~~~~~~~~
 	Container:-
 ~~~~~~~~~~~~~~~~~
-> docker info			### to check if docker is installed or not, and its information if installed
+docker info			### to check if docker is installed or not, and its information if installed
 
-> docker run nginx		### to run container image
+docker run nginx		### to run container image
 
-> docker ps			### to check containers running
+docker ps			### to check containers running
 
 > docker rm <container id/container name>			### to remove container
 
