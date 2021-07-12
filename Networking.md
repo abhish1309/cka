@@ -70,6 +70,7 @@ cat /etc/resolve.conf
 
 ---
 record types.
+| Name  | type     |
 |-------|-------   |
 | A     | for ipv4 |
 | AAAA  | for ipv6 |
