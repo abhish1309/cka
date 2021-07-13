@@ -1,0 +1,508 @@
+* there are two types of commands (internal and external)
+    $ type echo     ## to check command type
+
+* command [option] arguments        ## general syntax of commands
+
+    $ whatis date       ## to check what does the command does
+    $ man date      ## get help
+    $ date --help       ## get help
+    $ apropos modpr     ## commands contains words
+
+    $ mkdir dir1        ## create a directory
+    $ mkdir -p dir1.1   ## create directory inside the parent dir1
+    $ rm -r dir1          ## delete recursively
+
+    $ echo $SHELL       ## to check the current shell
+    $ chsh              ## to change the shell
+    $ history           ## to check the history of commands you entered
+    $ env               ## to check the environment variables
+    $ export OFFICE=caleston        ## to set environment variables
+    $ OFFICE=caleston       ## environment variables set within the shell, destroyed when shell exit, not used for other processes
+    $ echo $PATH            ## to check the paths
+    $ which obs-studio      ## location of command, check app/program install location.
+     
+    $ PS1="[\u@\h:\w]$ "        ## u-username, h-hostname, w-current working directory
+-------------------------------------------------------------------------------
+
+* working with hardware
+
+	$ dmesg		## display message, contains logs from hrdware logs 
+	$ dmesg | grep -i usb       ##  
+
+    $ udevadm info --query=path --name=/dev/sda5
+    $ udevadm monitor       
+
+    $ lspci         ## to display all list of pci attached to the system
+    $ lsblk         ## list information of block devices
+
+    $ lscpu         ## shows details of cpu
+
+Note: Sockets x Cores x Threads = Cpus
+
+    $ lsmem --summary           ## to check available memmory in the system
+    $ free -m
+    
+    $ lshw          ## complete information of the system
+
+
+* runlevels
+    $ runlevel          ## to check the current runlevel
+
+    $ systemctl get-default         ## to check default target/runlevel
+    $ systemctl set-default multi-user.target           ## to set target required
+
+
+-------------------------------------------------------------------------------
+* Package Manager
+  * working with RPM ( does not resolve dependencies)
+    $ rpm -ivh telnet.rpm       ## i= installation,interactive, verbose
+    $ rpm -e telnet.rpm         ## uninstalling
+    $ rpm -Uvh telnet.rpm       ## upgrade
+    $ rpm -q telnet.rpm         ## query
+    $ rpm -Vf <path to file>    ## verfifying the files in package with original 
+
+    $ rpm -qa                   ## to list all packages
+
+  * yum package Manager ( resolves, authomatic dependencies resolution)
+    * /etc/yum.repos.dependencies
+    $ yum install httpd
+    $ yum install httpd -y      ## install without asking 
+    $ yum repolist          ## to check repo list
+    $ yum provides scp      ## which package provides scp command?
+    $ yum remove httpd      ## remove package
+    $ yum update telnet     ## update perticular package
+    $ yum update            ## update all packages
+    
+
+  * DPKG (debian package manager)
+    * dpkg does not resolve dependencies.
+    $ dpkg -i telnet.deb        ## to install package
+    $ dpkg -r telnet.deb        ## uninstall packages
+    $ dpkg -l telnet            ## to list packages
+    $ dpkg -s telnet            ## to check status, if it is installed in system
+    $ dpkg -p < path to file >  ## to verify the packages.
+
+  * apt (higher level package manager)
+    $ apt install gimp          ## user friendly output during installation, advanced packager manger than apt-get
+    $ apt-get install gimp      ## not userfriendly output info,package manager
+
+    * repositories are located at " /etc/apt/sources.list "
+    $ apt update
+    $ apt upgrade
+    $ apt edit-sources          ## opens /etc/apt/sources.list in vi to edit
+
+    $ apt install telnet    ## to install package
+    $ apt remove telnet     ## to remove package
+    $ apt search telnet     ## to search packages 
+    $ apt list | grep telnet       ## to list packages
+
+-------------------------------------------------------------------------------
+* File compression and archival
+    $ du -sh test.img       ## to get size used by the file ( disk usage = du)
+    $ ls -lh test.img               ## to get details of file
+
+    * archiving
+    $ tar -cf test.tar file1 file2 file3        ## to create a tar with f ( filename)
+    $ tar -tf test.tar                          ## to check the contect of tar while creating tar 
+    $ tar -xf test.tar                          ## to extract the content of tar file
+    $ tar -zcf test.tar file1 file2 file3       ## to create compressed tar 
+
+    * compressing & uncompression
+    $ bzip2 test.img
+    $ bunzip2 test.img.bz2
+
+    $ gzip test1.img
+    $ gzip test1.img.bz2 
+
+    $ xz test2.img
+    $ unxz test2.img.xz 
+
+    * view/read content  without uncompression
+    $ zcat hostfile.txt.bz2                     ## to check the contents of file without extracting it
+
+
+-------------------------------------------------------------------------------
+* Searching for Files and Directories
+    $ locate city.txt           ## depends on db
+    $ update db                 ## need to update db before using locate command 
+
+    $ find /home/michael -name city.txt     ## find <source> -name <filename> 
+
+    $ grep second sample.txt    ## checks for "second" in file sample
+    $ grep -i second sample.txt     ## check by ignoring casesensitive
+    $ grep -r "third line" /home/michael        ## search word in entire directory files.
+    $ grep -v "printed" sample.txt      ## opposite of grep
+    $ grep -w exam sample.txt       ## to match exact word
+
+    $ grep -A2 exam sample.txt      ## to get lines after result line
+
+-------------------------------------------------------------------------------
+* IO redirection ( bob password: caleston123)
+    $ cat missing_file 2> error.txt         ## to redirect error in file
+    $ cat missing_file 2> /dev/null         ## does not show error on screen
+
+    $ cat shell.txt | less
+    $ cat shell.txt | tee less
+    $ cat shell.txt | tee -a less bell.txt
+
+
+-------------------------------------------------------------------------------
+* Linux Accounts
+    $ cat /etc/passwd       ## to check users in Linux
+    $ cat /etc/group        ## to check group  
+
+    $ id      ## to check the id details of user
+    $ who     ## listo of users currently logged in
+    $ last    ## all list of logged in users with date and time
+  
+  * switching user
+    $ su      
+    $ su -    ## root 
+
+  * sudo 
+    $ visudo
+    $ vi /etc/sudoers 
+
+    Note: bob ALL=(ALL:ALL) ALL
+    1- User or Group - bob,%sudo (group) 
+    2- Hosts - localhost,ALL(default) 
+    3- User - ALL(default)
+    4- Command - /bin/ls, ALL(unrestricted)
+
+  * Managing users 
+    $ useradd bob
+    $ grep -i bob /etc/passwd 
+    $ grep -i bob /etc/shadow
+    $ passwd bob              ## to change bob password 
+
+    $ useradd -u 1009 -g 1009 -d /home/robert -s /bin/bash -c "Mercury Project member" bob
+
+    Note:
+    -c: Custom Comments
+    -d: custom home directory 
+    -e: expiry date 
+    -g: specific GID 
+    -G: create user with multiple secondary groups
+    -s: specify login shells
+    -u: specific uID 
+
+    $ userdel bob
+    
+    $ groupadd -g 1011 developer
+    $ groupdel developer 
+
+* Access Control Files: these files are not editable normally.
+    /etc/passwd - stores users details
+    /etc/shadow - stores passwords in hash
+    /etc/group - stores group information
+
+    
+* Linux file Permissions 
+  # chown owner:group filename
+
+  $ chown bob:develoer file1.txt    ### to change owner & group of file
+  $ chown bob file.txt            ## to change only owner of file
+  $ chgrp developer file.txt      ## to change only group ownership
+
+
+* ssh ans scp 
+  ssh <hostname OR IP ADDress>
+  ssh <user>@<hostnmae OR IP address>
+  ssh -l < user> <hostname OR IP address>
+
+  $ ssh-keygen -t rsa     ## to create a pair of keys for passwordless Access
+  $ ssh-copy-id bob@devapp01    ## to copy public key to remote server.
+
+  $ scp /homebon/caleston-code.tar.gz devapp01:/home/bob
+  $ scp -pr /home/bob/media devapp01:/home/bob    ## to presever permissions of file as it is.
+  
+
+* IPTABLES rules 
+  $ sudo apt install iptables     ## to install iptables if not installed
+  $ iptables -L       ## to list iptables 
+
+## to add rule in iptables.
+  $ iptables -A INPUT -p tcp -s 172.16.238.187 --dport 22 -j ACCEPT
+
+  ## -A Add Rule, -p Protocol, -s Source, -d Destination, --dport DestinationPort, -j ActionToTake
+  ## here it wil accept traffic from all other client as well , asn there is no deny option set for others.
+
+  $ iptables -A INPUT -p tcp --dport 22 -j DROP
+    ## this rule will drop all other connections 
+
+Note: Sequence in IPTABLES is important, as iptables applies rules sequentialy
+
+  $ iptables -A OUTPUT -p tcp -d 172.16.238.11 --dport 5432 -j ACCEPT
+      ## allowing outgoing connections to port 5432 from devdb01
+
+  $ iptables -A OUTPUT -p tcp -d 172.16.238.15 --dport 80 -j ACCEPT
+      ## allow outgoing connection to port 80 .src/dest:- caleston-repo-01
+
+  $ iptables -A OUTPUT -p tcp --dport 443 -j DROP
+  $ iptables -A OUTPUT -p tcp --dport 80 -j DROP 
+      ## drop all outgoin connections , port 80/443 (HTTP,HTTPS)
+
+  $ iptables -A INPUT -p tcp -s 172.16.238.187 --dport 80 -j ACCEPT
+      ## allow incoming on port 80
+
+  $ iptables -I OUTPUT -p tcp -d 172.16.238.100 --dport 443 -j ACCEPT
+      ## this will add rule at first positon in IPTABLES.
+
+  $ iptables -D OUTPUT 5
+      ## to delete a rule 
+
+
+  bob@devapp01  $ iptables -A OUTPUT -p tcp -d 172.16.238.11 --dport 5432 -j ACCEPT
+  bob@devdb01 $ iptables -A INPUT -p tcp -s 172.16.238.10 --dport 5432 -j ACCEPT 
+  bob@devdb01 $ iptables -A INPUT -p tcp --dport 5432 -j DROP
+      ## to secure db servers
+
+
+*********************
+
+DNS
+/etc/hosts		## local dns
+/etc/resolv.conf	## dns
+/etc/nsswitch		## to assign priority to use dns from
+
+
+********************
+
+Networking
+
+$ route			## to  check gateway, routing table
+$ ip route 		## add entries to routing table
+
+$ ip route add default via 192.168.x.x
+$ ip route add 0.0.0.0 via 192.168.x.x  
+
+$ ip link		## list to ehternet adapters
+$ ip addr
+$ ip addr add
+
+$ ip a
+
+$ telnet devapp01-web 80
+
+-------------------------------------------------------------------------------
+Storage:-
+
+$ lsblk     ## list available Storage block
+
+$ ls -l /dev/ | grep "^b"     ## manual search in system
+
+$ fdisk -l /dev/sda 
+
+$ gdisk /dev/sdb      ### improved version of fdisk
+
+Disks and Partitions:-
+
+Maj.No  Device type
+1       Ram
+3       Hard Disk or Cd remote
+6       Parallel printers 
+8       Scsi Disk 
+
+* Types of Partitions :- Primary, Extended, Logical.
+Primary Partition:- These Partitions are used to boot an operating systems.In MBR, we can create upto 4 primary partitions or 3 primary and 1 extended.
+  GPT partitions allows n number for primary partition. RHEL allows only 128 partitions.
+Extended Partitions:- These partitions cannot be used on its own, but can host logical partitions. Extended partition has its tables which points to logical partitions.
+Logical Partitions:- are partitions those create within an extended Partition
+
+$ lsblk 
+$ gdisk /dev/sdb 
+$ ?                 ## to print all available options 
+$ n                 ## to create a new partition. 
+ 1
+$ L                 ##  8300 by default
+$ p                 ## to check partition to be applied.
+$ w                 ## to write changes 
+$ Y                 ## to proceed 
+
+Note:- Partition itself does not make the disk usable, we need to create a filesystem. Filesystem decides how data is stored on a disk.
+After creating a filesystem we must mount to a directory. 
+Mounting is possible only if it has a filesystem. 
+----
+Filesystem:- Filesystem decides how data is stored on a disk. After creating a filesystem we must mount to a directory.
+$ blkid                   ## to check the type of filesystems on all partitions.
+$ blkid /dev/vdc          ## to check type of filesystem on perticular partition. 
+
+$ mkfs.ext4 /dev/sdb1       ## create ext4 filesystem on disk /dev/sdb1 
+
+$ mkdir /mnt/ext4           ## create a folder on which the new disk is to be mounted.
+
+$ mount /dev/sdb1 /mnt/ext4 
+
+$ mount | grep /dev/sdb1 
+
+$ df -hP | grep /dev/sdb1 
+
+$ echo "/dev/sdb1 /mnt/ext4 rw 0 0" >> /etc/fstab
+
+FIELD        PURPOSE
+Filesystem  :Such as /dev/vdb1 to be mounted
+Mountpoint  :Directory to be mounted on 
+Types       :Example ext2,ext3,ext4 
+Options     :Such as rw = read-write, ro = read only 
+Dump        :0 = Ignore, 1= take backup 
+Pass        :0 = ignore, 1 or 2 = FSCK FILEsystem check enforced. 
+
+summary:- step to create partition usable .
+1. create a partition 
+2. create a filesystem on partition 
+3. mount a partition on required folder.
+
+Storage types:-
+DAS, NAS, SAN 
+
+DAS:- Directly attached storage (DAS) generally has a faster reposnse than a NAS device. Downside is that it is dedicated to a single server.
+
+NAS:- Network attached storage (NAS) is quite similar to NFS server, because NAS is files storage device unlike DAS and SAN both of which are block storage device.
+      The storage is provided to the hosts in the form of a directory or a share that is phyiscally present in the NAS device but exported via NFS to the hosts.
+
+SAN:- Storage Area Network (SAN) provides block storage. Storage is allocated to hosts in the form of a LUN (Logical Unit Number).
+      LUN is a range of blocks provisioned from a pool of shared storage and presented to the server as a logical disk.
+      Host system will detect LUN storage as a raw disk. We can create partitions and a filesystem on top of it and then mount it on host to store data. 
+
+---
+
+NFS:- NFS stores data in the form of  files. The term for directory sharing in NFS is called exporting. 
+      Once the /etc/exports file has been updated on teh server, the diretory is shared to the clients by using the "exportfs" command.
+      "$ exportfs -a" command exports all the mounts defined in the /etc/exports file.
+      "$ exportfs -0" allows us to manually export a dirctory. 
+          eg. $ exportsfs -0 10.61.35.201:/software/repos       ### client ip 10.61.112.101
+      After export we can mount it on local directory using mount comount command on client side.
+          eg. $ mount 10.61.112.101:/software/repos /mnt/software/repos     ### server ip 10.61.112.101
+
+$ mount       ### to check available mounts.
+$ mount | grep -w NFS   ## to check available nfs mounts.
+
+Note: refer Vishesh Malik videos or notes.
+
+-------------------------------
+LVM:- 
+
+$ apt-get install lvm2		## install the lvm package if it is not installed.
+
+* create:-
+$ pvcreate /dev/sdb		## create physical volume from available raw disk/partition
+
+$ vgcreate caleston_vg /dev/sdb	## create volume group 
+
+$ lvcreate -L 1G -n vol1 caleston_vg 
+
+*display:-
+$ pvdisplay	## to check physical volume details.
+$ pvs
+$ vgdisplay	## to check volume groups details. 
+$ vgs
+$ lvdisplay	## to check logical volumes
+$ lvs
+
+
+$ mkfs.ext4 /dev/caleston_vg/vol1
+
+$ mount -t ext4 /dev/caleston_vg/vol1 /mnt/vol1
+
+$ lvresize -L +1G -n /dev/caleston_vg/vol1 		## here only volume size is increased and not filesystem, and unable to use whole size.
+$ df -hP /mnt/vol1		## check filesystem
+
+$ resize2fs /dev/caleston_vg/vol1			## here the filesystem size is increased, and full volume can be utilized.
+$ df -hP /mnt/vol1		## check filesystem 
+
+
+-----------------------------------
+SYSTEMD and services
+Requirements:-
+*1. Program - /usr/bin/project-mercury.sh must start at the boot time.
+*2. Start Python Application after PostgressDB
+*3. Use Service Account project_mercury 
+*4. Auto Restart on Failure 
+*5. Restart Interval 10 seconds 
+*6. Log Service Events 		## automatic
+*7. Load when booting into Graphical Mode 
+
+
+
+Ans:- to do this we need to define it as a service for this program.
+
+$ vi /etc/systemd/system/project-mercury.service 
+
+
+[Unit]
+Description=Python Django for Project Mercury
+Documentation=http://wiki.caleston-dev.ca/mercury 
+After=postgresql.service 				## 2
+ 
+
+[Service]						## 1 st requirement
+ExecStart= /bin/bash /usr/bin/project-mercury.sh 
+
+User=project_mercury					## 3
+Restart=on-failure					## 4
+RestartSec=10 						## 5
+
+
+[Install]
+WantedBy graphical.target				## 7
+
+
+$ systemctl daemon-reload
+
+$ systemctl start project-mercury.service 
+
+
+$ systemctl status project-mercury.service 
+
+-----------
+SYSTEMD tools.
+
+1. systemctl
+  * manage system state, start/stop/restart/reload, enable/disable, list and manage units, list and update targets.
+
+2. journalctl
+  * query systemd journal 
+
+
+*1. service management with systemd 
+$ systemctl start docker 
+$ systemctl stop docker 
+$ systemctl restart docker 
+$ systemctl reload docker 
+$ systemctl enable docker 
+$ systemctl disable docker 
+
+$ systemctl daemon-reload 
+
+state		Meaning
+active		:Service running 
+Inactive	:Service Stopped 
+Failed		:Crashed/Error/Timeout e.t.c 
+
+$ systemctl edit project-mercury.service --full			## this will open service file in text editor.
+
+$ systemctl get-default			## to check current run level 
+$ systemctl set-default multi-user.target	## to set current run level 
+
+$ systemctl list-units --all			## to list all the units  SYSTEMD has loaded or attempted to load.
+
+
+
+2. journalctl 
+$ journalctl		## without any flag, prints all the log entries
+
+$ journalctl -B 	## to see logs from current boot
+
+$ journalctl -U	docker.service	## to see the log entries for a specific unit with the name of service.
+
+$ 
+ 
+
+		
+
+
+ 
+
+
+
+

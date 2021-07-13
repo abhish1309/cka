@@ -1,0 +1,466 @@
+
+Section 03
+--------------------------------------------
+ACL
+---
+Note:- As you assighn ACL permission to a file/directory it adds + sign at the end of the permission.
+       Setting w permission with ACL does not allow to remove a file
+
+List of commands for setting up ACL:
+
+1) to add permission for user
+	$ setfacl -m u:username:rwx /path/to/file
+
+2) to add permission for a group
+	$ setfacl -m g:groupname:rw /path/to/file
+
+3) to allow all files or directories to inherit ACL antries from the directory it is within
+	$ setfacl -Rm u:abhijit:rw /path/to/dir
+
+4) to remove a specific entry
+	$ setfacl -x u:user /path/to/file
+
+5) to remove all entries
+	$ setfacl -b path/to/file 
+	$ setfacl -Rb path/to/file
+
+
+--------------------------------------------
+Help Commands
+
+whatis <cmd>
+<cmd> --help
+man <cmd>
+--------------------------------------------
+tee
+
+	$ echo "David is Eliane's boyfriend" | tee eliane-david
+	$ echo "They are happy together" | tee -a eleane-david			# append the output
+ 
+______________________________________________________________
+Section 05 
+----------
+System Administration
+----------------------
+Commands
+	$ useradd myuser1
+	$ groupadd mygroup1
+	$ usermod myuser1
+	$ userdel myuser1
+	$ userdel -f myuser1		## to delete home directory of user
+	$ userdel myuser1
+	$ chgroup -R superheros spiderman	## -R to cascade permision of group to user spiderman
+
+When user is created,detailes are maintained in Files:-
+/etc/passwd
+/etc/group
+/etc/shadow
+
+Example:
+	$ useradd -g superheros -s /bin/bash -c "user description" -m -d /home/spiderman spiderman
+
+
+-----------------------------
+Switch Users and sudo Access
+-----------------------------
+Commands:
+	$ su - myuser1
+	$ sudo command
+	$ visudo
+
+Files:
+/etc/sudoers
+
+--------------
+Monitor Users
+--------------
+	$ who		## to check how many people are logged in to the system and what they are accessing
+	$ last
+	$ w
+	$ finger
+	$ id myuser1
+
+e.g	$ last | awk '{print $1}' | sort | uniq		## to check how many users are logged in.
+
+
+-----------------
+Talking to Users
+-----------------
+
+	$ users		## to check no of users logged in
+	$ wall
+	$ write
+ 
+e.g 	$ write spider
+		Hi  Spider, your web is getting bigger, Please stop spreading your web.
+
+
+-----------------------------
+Linux Account Authentication
+-----------------------------
+
+* Active Directory = Microsoft
+* IDM = Identity Manager ( RED Hat)
+* WinBIND = Used in Linux to communicate with windows (Samba)
+* OpenLDAP = open source
+* IBM Directory Server
+* JumpCloud
+* LDAP = Lightweight Directory Access Protocol
+
+
+------------------------
+System Utility Commands
+------------------------
+	$ date
+	$ uptime
+	$ hostname
+	$ uname
+	$ which
+	$ cal
+	$ bc
+
+-------------------
+Processes and Jobs
+-------------------
+
+Application = Service
+Script = package of commands.
+Process = application/service generates process
+Thread = every process can have multiple threads associated to it.
+Job = Runs a service or process at scheduled time
+Daemon =  Continuesly run in background
+
+* systemctl or $ service		## service has been replaced with the new systemctl command.
+* $ ps 				## process info
+* $ top 
+* $ kill			## kills process
+* $ crontab			## schedule applications
+* at.
+
+e.g $ crontab -e		## to enter details to run periodically
+    $ cat /etc/anacrontab	## to edit details in crontab.
+    $ cd /etc; ls grep -i cron
+
+
+Process Management
+* background 
+
+
+------------------
+System Monitoring
+------------------
+	$ top
+	$ df
+	$ dmesg
+	$ iostat
+	$ netstat
+	$ free
+	$ cat /proc/cpuinfo
+	$ cat /proc/meminfo
+
+
+e.g	$ df -h
+	$ du
+
+
+----------------------
+System logs
+----------------------
+
+
+______________________________________________________________
+			Section 08
+______________________________________________________________
+
+------------------------------------------
+Disk Partition
+------------------------------------------
+df -h
+fdisk -l		## disk size, detailed info about disc.		
+
+
+------------------------------------------
+Adding disk and creating partition
+------------------------------------------
+fdisk -l
+fdisk /dev/sdb
+:  n		## to add new partition
+:  p		## primary partition
+:  +2G		## +size of partition
+:  w		## to write & save
+
+$ mkfs.xfs /dev/sdb1
+
+------------------------------------------
+File System Check (fschk and xfs_repair )
+------------------------------------------
+
+df -h | awk '{print $1}		##
+
+df -T			## to check filesystem
+
+fsck /dev/sdb1		## check for xfs_repair
+
+xfs /dev/sdb1		## contains a mounted fs.
+
+umount /data		## unmount /data for xfs_repair, copy the tmp to remember 
+
+df -T			## verify
+
+xfs_repair /dev/sdb1	## repair when file system is corrupted
+
+echo $?			## check for exit code , if it cause any error
+
+mount /dev/sdb1 /data	## mount it again , where it was
+
+df -T			## verify
+
+
+--------------------------------
+169. System Backup (dd Command)
+--------------------------------
+
+dd if=<source file name> of=<target file name> [options}
+
+dd if=/dev/sda of=/dev/sdb	## clones entire harddisk ,both must have exact same size, less not work
+
+dd if=/dev/sda1	of=/data/boot.img		## to backup/copy the disk partition
+
+dd if=/root/sda1.img of=/dev/sdb3	## restoring this image file to other maschine after copying the .img
+
+
+-------------------------------
+170. Network File System (nfs)
+-------------------------------
+
+** steps for NFS Server Configuration (on Server)
+-------------------------------------------------
+* install NFS packages
+	$ yum install nfs-utils libnfsidmap	## most likely they are installed with os.
+
+* once the packages are installed, enable and start NFS services ( at boot time)
+	$ systemctl enable rpcbind
+
+	$ systemctl enable nfs-server
+
+	$ systemctl start rpcbind
+
+	$ systemctl start nfs-server
+
+	$ systemctl start rpc-statd
+
+	$ systemctl start nfs-idmapd
+
+* create NFS share directory and assign permissions
+	$ mkdir /mypretzels
+	$ chmod a+rwx /mypretzels
+
+  * modify /etc/exports file to add new shared filesystem
+	$ cp /etc/exports /etc/exports_08082020			## copy for safer side, if anything goes wrong, can use this file.
+
+	/mypretzels *(rw,sync,no_root_squash) 	##edit, for all/only 1 host. * for all
+	
+  * Export the NFS filesystem
+	$ exportfs -rv				## share with other machines
+
+
+** client configuration
+-----------------------
+* install nfs packages
+	$ yum install nfs-utils rpcbind
+
+  * enable and start rpcbind service
+	$ service rpcbind start
+
+  * make sure firewalld or iptables stopped & disabled (if running)
+	$ ps -ef  | egrep "firewall|iptable"
+
+  * show mount from nfs server
+	$ showmount -e 192.168.1.5 		##(NFS server IP)
+
+  * create mount point
+	$ mkdir /mnt/app
+
+  * mount the NFS filesystem
+	$ mount 192.168.43.9:/mypretzels /mnt/kramer			## mount -t nfs [nfsserverip ]:/webdata /var/www/html
+
+* verify
+	$ df -h 
+
+
+--------
+Samba (20210609)
+--------
+
+* Take a snapshot of your vm
+* Install samba packages
+	$ yum install samba samba-client samba-common
+
+* Enable samba to be allowed through firewall 
+	# firewall-cmd --permanent --zone=public --add-service=samba
+	# firewall-cmd –reload
+
+* Disable firewall
+	# systemctl stop firewalld
+	# systemctl stop iptables
+	# systemctl disable firewalld
+	# systemctl disable iptables
+
+* create Samba share directory and assign permissions
+	# mkdir -p /samba/morepretzels
+	# chmod a+rwx /samba/morepretzels
+	# chown -R nobody:nobody /samba
+
+* Also change the SELinux security context for the samba shared directory
+	# chcon -t samba_share_t /samba/morepretzels
+
+    If you want to disable SELinux, follow these instructions
+	# sestatus To check the SELinux status)
+	# vi /etc/selinux/config
+    Change
+    SELINUX=enforcing
+    To 
+    SELINUX=disabled
+	# reboot
+
+* Modify /etc/samba/smb.conf file to add new shared filesystem (Make sure to create a copy of smb.conf file).Delete everything from smb.conf file and add the following parameters
+    [global]
+	workgroup = WORKGROUP
+	netbios name = centos
+	security = user
+	map to guest = bad user
+	dns proxy = no
+    [Anonymous]
+	path = /samba/morepretzels
+	browsable = yes
+	writable = yes
+	guest ok = yes
+	guest only = yes
+	read only = no
+
+* Verify the setting
+	# testparm
+
+* Once the packages are installed, enable and start Samba services (smb and nmb)
+	# systemctl enable smb
+	# systemctl enable nmb
+	# systemctl start smb
+	# systemctl start nmb
+
+* Mount Samba share on Windows client
+	o Go to start
+	o Go to search bar
+	o Type \\192.168.1.95
+
+* Mount Samba share on Linux client
+  Become root
+	# yum -y install cifs-utils samba-client
+  Create a mount point directory
+	# mkdir /mnt/sambashare
+  Mount the samba share
+	# mount -t cifs //192.168.1.95/Anonymous /mnt/sambashare/
+	# Entry without password
+  
+  Mount on required location with perticular user.	
+	$ mount -o user=larry //192.168.43.74/samba_dir_secured /mnt/samba_dir_secured/
+
+* Additional instructions on creating secure Samba share
+
+  Create a new share, set the permission on the share:
+	# mkdir /samba/securepretzels
+	# chown -R larry:smbgrp /samba/securepretzels
+	# chmod -R 0770 /samba/securepretzels
+	# chcon -t samba_share_t /samba/securepretzels
+
+
+	# vi /etc/samba/smb.conf
+  Add the following lines
+    [Secure]
+	path = /samba/securepretzels
+	valid users = @smbgrp
+	guest ok = no
+	writable = yes
+	browsable = yes
+
+Restart the services
+	# systemctl restart smb
+	# systemctl restart nmb
+
+* Mount on required location with perticular user credentials.	
+	$ mount -o user=larry //192.168.43.74/samba_dir_secured /mnt/samba_dir_secured/
+
+---------------------------------------------------------------------------------------------------------------
+----------
+Differece between Linux 5,6, and 7 (20210609)
+----------
+
+
+---------------
+217. firewalld
+---------------
+
+* to reload the firewall configuration
+	$ firewall-cmd --reload
+
+* The firewall has multiple zone, to get a list of all zones
+	$ firewall-cmd --get-zones
+
+* to get a list of active zones	
+	$ firewall-cmd --get-active-zones
+
+* to see what services are associated with a given zone.Note that if you do not specify a zone, the default zone is queried. Here, the default zone is the public zone
+	$ firewall-cmd --list-all
+
+* to see specific zone
+	$ firewall-cmd --zone=external --list-all
+
+* to change default zone
+	$ firewall-cmd --set-default=zonename
+
+
+* to add a service (http)
+	$ firewall-cmd --add-service=http --permanent
+
+* to remove a service
+	$ firewall-cmd --remove-serive=http
+
+* to verify new service
+	$ firewall-cmd --get-services
+
+* All servies are pre-defined by firewalld. What if you want to add a 3rd party service
+	* /usr/lib/firewalld/services/allserives.xml
+	
+	* simply cp any .xml file and change the service and port number. eg cp ssh.xml sap.xml, edit port no to 32, and discription as required
+	$ systemctl restart firewalld
+	
+	$ firewall-cmd --get-serives
+	
+	$ firewall-cmd --add-service=sap
+
+* to add a port
+	$ firewall-cmd --add-port=1110/tcp
+
+* to remove a port
+	$ firewall-cmd --remove-port=1110/tcp
+
+* to reject incomming traffic from an ip address
+	$ firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.0.25" reject'
+	
+* to (block & unblock) ICMP incoming traffic
+	$ firewall-cmd --add-icmp-block-inversion
+	$ firewall-cmd --remove-icmp-block-inversion
+
+* to block outgoing traffic to a specific website/IP address
+	$ host -t a www.facebook.com
+
+	$ firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -d 31.13.71.36 -j DROP
+
+	
+
+
+
+
+
+
+
+

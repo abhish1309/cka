@@ -1,0 +1,30 @@
+Commands of terraform:
+
+$ terraform init		## initiates and downloads the required plugins related to provider used in configuration
+
+$ terraform validate
+
+$ terrafrom plan
+
+$ terraform apply		## apply changes to realworld infra
+
+$ terraform show		## shows the tfstate in readable form
+
+$ terraform refresh		## sync with the real world infrastructure to update state file
+
+$ terraform providers		## shows the providers
+
+$ terraform providers mirror /root/terraform/new_local_file		## can copy/mirror the providers in newly created directory, instead of downloading again.
+
+$ terraform output		## shows the output variables
+
+$ terraform output pet-name		## to check the details of pericular variable.
+
+$ terraform graph
+
+### need software to visualize this 
+$ apt update
+$ apt install graphviz -y
+###
+
+$ terraform graph | dot -Tsvg > graph.svg
