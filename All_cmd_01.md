@@ -41,7 +41,7 @@ kubeadm token create --print-join-command
 
 ### it simply marks the node as "unschedulable" and do not terminates the existing pods; it makes sure the new pods are not created on it.
 ```
-kubectl conrdon node-2		
+kubectl cordon node-2		
 ```
 
 ### existing pods are terminated from the "node-1" and recreated on another node; and "node-1" is marked as cordan and unschedulable.
